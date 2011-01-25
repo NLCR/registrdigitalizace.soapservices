@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<collection xmlns="http://www.loc.gov/MARC21/slim"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+
+    <record>
+
+        <leader>     nam a22        4500</leader>
+
+        <controlfield tag="FMT">BK</controlfield>
+
+        <controlfield tag="001">bknzdr17710</controlfield>
+
+        <controlfield tag="003">CZ PrNK</controlfield>
+
+        <controlfield tag="005">20081015104252.0</controlfield>
+
+        <controlfield tag="007">ta</controlfield>
+
+        <controlfield tag="008">021202s1869    xr            000   cze</controlfield>
+
+        <datafield ind1=" " ind2=" " tag="020">
+
+            <subfield code="a">(Brož.)</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2=" " tag="035">
+
+            <subfield code="a">(OCoLC)85694524</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2=" " tag="040">
+
+            <subfield code="a">ABA001</subfield>
+
+            <subfield code="b">cze</subfield>
+
+            <subfield code="c">ABA001</subfield>
+
+            <subfield code="d">ABA001</subfield>
+
+        </datafield>
+
+        <datafield ind1="1" ind2=" " tag="041">
+
+            <subfield code="a">cze</subfield>
+
+            <subfield code="h">lat</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2=" " tag="043">
+
+            <subfield code="a">e-xr---</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2=" " tag="045">
+
+            <subfield code="a">s-u-</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2="7" tag="072">
+
+            <subfield code="a">271/279</subfield>
+
+            <subfield code="x">Křesťanské církve, sekty, denominace</subfield>
+
+            <subfield code="2">Konspekt</subfield>
+
+            <subfield code="9">5</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2=" " tag="080">
+
+            <subfield code="a">274/278-7</subfield>
+
+            <subfield code="2">MRF</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2=" " tag="080">
+
+            <subfield code="a">274/278-1/-9</subfield>
+
+            <subfield code="2">MRF</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2=" " tag="080">
+
+            <subfield code="a">27-9</subfield>
+
+            <subfield code="2">MRF</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2=" " tag="080">
+
+            <subfield code="a">27-4</subfield>
+
+            <subfield code="2">MRF</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2=" " tag="080">
+
+            <subfield code="a">2-6</subfield>
+
+            <subfield code="2">MRF</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2=" " tag="080">
+
+            <subfield code="a">(437.3)</subfield>
+
+            <subfield code="2">MRF</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2=" " tag="080">
+
+            <subfield code="a">(049)</subfield>
+
+            <subfield code="2">MRF</subfield>
+
+        </datafield>
+
+        <datafield ind1="1" ind2=" " tag="100">
+
+            <subfield code="a">Komenský, Jan Amos,</subfield>
+
+            <subfield code="d">1592-1670</subfield>
+
+            <subfield code="7">jk01061444</subfield>
+
+            <subfield code="4">trl</subfield>
+
+        </datafield>
+
+        <datafield ind1="1" ind2="0" tag="240">
+
+            <subfield code="a">Johannis Lasitii Nobilis Polonii Historiae de origine et rebus gestis Fratrum Bohemicorum liber octavus.</subfield>
+
+            <subfield code="l">Česky</subfield>
+
+        </datafield>
+
+        <datafield ind1="1" ind2="0" tag="245">
+
+            <subfield code="a">Obraz Jednoty Českobratrské, čili, Jana Lasitského historie o původu a činech Bratří Českých kniha osmá :</subfield>
+
+            <subfield code="b">jenž jest o obyčejích a řádech, kterýchž mezi sebou užívají, pro potřebu církve Boží obzvláštně vydaná v Lešně Polském /</subfield>
+
+            <subfield code="c">od Jana Amosa Komenského, Léta Páně 1649</subfield>
+
+        </datafield>
+
+        <datafield ind1="3" ind2="0" tag="246">
+
+            <subfield code="a">Jana Lasitského historie o původu a činech Bratří Českých kniha osmá</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2=" " tag="260">
+
+            <subfield code="a">V Praze :</subfield>
+
+            <subfield code="b">Spolek Komenského,</subfield>
+
+            <subfield code="c">1869</subfield>
+
+            <subfield code="f">(Tiskem dra. Edv. Grégra)</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2=" " tag="300">
+
+            <subfield code="a">viii, 307 s. ;</subfield>
+
+            <subfield code="c">17 cm</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2="0" tag="440">
+
+            <subfield code="a">Českobratrská bibliotéka ;</subfield>
+
+            <subfield code="0">s</subfield>
+
+            <subfield code="v">č. 1</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2=" " tag="500">
+
+            <subfield code="a">Přeloženo z latiny</subfield>
+
+        </datafield>
+
+        <datafield ind1="0" ind2=" " tag="505">
+
+            <subfield code="a">Předmluva k Lasiciovi Jana Amosa Komenského -- O obyčejích a řádech starých Bratří českých [překlad knihy osmé Lasitského] -- Závírka Komeniusova</subfield>
+
+        </datafield>
+
+        <datafield ind1="2" ind2="7" tag="610">
+
+            <subfield code="a">Jednota bratrská</subfield>
+
+            <subfield code="7">ola2002113637</subfield>
+
+            <subfield code="2">czenas</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2="4" tag="648">
+
+            <subfield code="a">15.-17. stol.</subfield>
+
+        </datafield>
+
+        <datafield ind1="0" ind2="7" tag="650">
+
+            <subfield code="a">protestantské církve</subfield>
+
+            <subfield code="z">Česko</subfield>
+
+            <subfield code="y">15.-17. stol.</subfield>
+
+            <subfield code="2">czenas</subfield>
+
+        </datafield>
+
+        <datafield ind1="0" ind2="7" tag="650">
+
+            <subfield code="a">protestantské učení</subfield>
+
+            <subfield code="z">Česko</subfield>
+
+            <subfield code="y">15.-17. stol.</subfield>
+
+            <subfield code="2">czenas</subfield>
+
+        </datafield>
+
+        <datafield ind1="0" ind2="7" tag="650">
+
+            <subfield code="a">církevní dějiny</subfield>
+
+            <subfield code="z">Česko</subfield>
+
+            <subfield code="y">15.-17. stol.</subfield>
+
+            <subfield code="2">czenas</subfield>
+
+        </datafield>
+
+        <datafield ind1="0" ind2="7" tag="650">
+
+            <subfield code="a">církevní život</subfield>
+
+            <subfield code="z">Česko</subfield>
+
+            <subfield code="y">15.-17. stol.</subfield>
+
+            <subfield code="2">czenas</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2="7" tag="651">
+
+            <subfield code="a">Česko</subfield>
+
+            <subfield code="x">náboženské poměry</subfield>
+
+            <subfield code="y">15.-17. stol.</subfield>
+
+            <subfield code="2">czenas</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2="7" tag="655">
+
+            <subfield code="a">pojednání</subfield>
+
+            <subfield code="2">czenas</subfield>
+
+        </datafield>
+
+        <datafield ind1="1" ind2="2" tag="700">
+
+            <subfield code="a">Łasicki, Jan,</subfield>
+
+            <subfield code="d">1534-1605.</subfield>
+
+            <subfield code="t">Historia ecclesiastica de disciplina, moribus et institutis Fratrum Bohemorum</subfield>
+
+        </datafield>
+
+        <datafield ind1="4" ind2="1" tag="856">
+
+            <subfield code="u">http://kramerius.nkp.cz/kramerius/handle/ABA001/11259722</subfield>
+
+            <subfield code="y">Digitalizovaný dokument</subfield>
+
+        </datafield>
+
+        <datafield ind1="1" ind2=" " tag="910">
+
+            <subfield code="a">ABA001</subfield>
+
+        </datafield>
+
+        <datafield ind1=" " ind2=" " tag="ITM">
+
+            <subfield code="b">1001570736</subfield>
+
+            <subfield code="c">54 G 000975/Ř.1.Sv.1.</subfield>
+
+            <subfield code="d">Ř.1.Sv.1.</subfield>
+
+            <subfield code="v"/>
+
+            <subfield code="i"/>
+
+            <subfield code="y"/>
+
+        </datafield>
+
+        <controlfield tag="SYS">001209169</controlfield>
+
+    </record>
+
+</collection>
