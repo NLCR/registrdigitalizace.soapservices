@@ -39,7 +39,7 @@ import javax.xml.transform.TransformerException;
  *
  * @author Jan Pokorsky
  */
-@WebService
+@WebService(targetNamespace="http://registrdigitalizace.cz/soapservices")
 public class DigitizationRegistry {
 
     /**
