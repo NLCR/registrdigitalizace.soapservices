@@ -17,6 +17,9 @@
 
 package cz.registrdigitalizace.soapservices.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.transform.Source;
 
@@ -24,19 +27,22 @@ import javax.xml.transform.Source;
  *
  * @author Jan Pokorsky
  */
-@XmlType(propOrder={"barcode", "state", "descriptor"})
+@XmlType(propOrder={"recordId", "state", "descriptor"})
+@XmlAccessorType(XmlAccessType.FIELD)
 public final class DigitizationRecord {
-    
-    private String barcode;
+
+    @XmlElement(required=true)
+    private int recordId;
+    @XmlElement(required=true)
     private DigitizationState state;
     private Source descriptor;
 
-    public String getBarcode() {
-        return barcode;
+    public int getRecordId() {
+        return recordId;
     }
 
-    public void setBarcode(String barcode) {
-        this.barcode = barcode;
+    public void setRecordId(int recordId) {
+        this.recordId = recordId;
     }
 
     public Source getDescriptor() {

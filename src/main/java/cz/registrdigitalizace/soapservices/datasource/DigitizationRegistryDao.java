@@ -19,6 +19,7 @@ package cz.registrdigitalizace.soapservices.datasource;
 
 import cz.registrdigitalizace.soapservices.model.DigitizationRecord;
 import cz.registrdigitalizace.soapservices.model.DigitizationState;
+import cz.registrdigitalizace.soapservices.model.PlainQuery;
 import java.util.Date;
 import java.util.List;
 
@@ -30,23 +31,24 @@ public final class DigitizationRegistryDao {
 
     public final RegistryDataSource ds = new RegistryDataSource();
 
-    public List<DigitizationRecord> findRecords(String ccnb) throws DataSourceException {
-        GetRecordsQuery query = new GetRecordsQuery(ccnb);
+    public List<DigitizationRecord> findRecords(PlainQuery pquery) throws DataSourceException {
+        GetRecordsQuery query = new GetRecordsQuery(pquery);
         ds.runQuery(query);
         return query.getRecords();
     }
 
-    public DigitizationState getRecordState(String ccnb, String barcode) throws DataSourceException {
-        GetRecordStateQuery query = new GetRecordStateQuery(ccnb, barcode);
+    public DigitizationState getRecordState(int recordId) throws DataSourceException {
+        GetRecordStateQuery query = new GetRecordStateQuery(recordId);
         ds.runQuery(query);
         return query.getState();
     }
 
-    public boolean updateRecordState(String ccnb, String barcode,
+    public boolean updateRecordState(int recordId,
             DigitizationState newState, DigitizationState oldState,
             String user, Date date) throws DataSourceException {
         
-        UpdateScanningStateQuery query = new UpdateScanningStateQuery(ccnb, barcode, newState, oldState, user, date);
+        UpdateScanningStateQuery query = new UpdateScanningStateQuery(
+                recordId, newState, oldState, user, date);
         ds.runQuery(query);
         return query.isUpdated();
     }

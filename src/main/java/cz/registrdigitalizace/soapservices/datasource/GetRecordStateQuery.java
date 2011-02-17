@@ -24,18 +24,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Finds out scanning state for cCNB + bar code.
+ * Finds out scanning state for a given record.
  *
  * @author Jan Pokorsky
  */
 public final class GetRecordStateQuery implements PreparedQuery<ResultSet> {
-    private final String ccnb;
-    private final String barcode;
+    private final int recordId;
     private DigitizationState state;
 
-    public GetRecordStateQuery(String ccnb, String barcode) {
-        this.ccnb = ccnb;
-        this.barcode = barcode;
+    public GetRecordStateQuery(int recordId) {
+        this.recordId = recordId;
     }
 
     /**
@@ -55,9 +53,8 @@ public final class GetRecordStateQuery implements PreparedQuery<ResultSet> {
 
     public PreparedStatement prepareStatement(Connection conn) throws SQLException {
         PreparedStatement pstmt = conn.prepareStatement(
-                "select skenstav from predloha where ccnb=? and carkod=?");
-        pstmt.setString(1, ccnb);
-        pstmt.setString(2, barcode);
+                "select skenstav from predloha where id=?");
+        pstmt.setInt(1, recordId);
         return pstmt;
     }
 

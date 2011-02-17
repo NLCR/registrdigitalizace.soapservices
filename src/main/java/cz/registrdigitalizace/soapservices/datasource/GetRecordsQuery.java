@@ -19,6 +19,7 @@ package cz.registrdigitalizace.soapservices.datasource;
 
 import cz.registrdigitalizace.soapservices.model.DigitizationRecord;
 import cz.registrdigitalizace.soapservices.model.DigitizationState;
+import cz.registrdigitalizace.soapservices.model.PlainQuery;
 import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,6 +27,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
@@ -33,23 +35,23 @@ import javax.xml.transform.stream.StreamSource;
 public final class GetRecordsQuery implements PreparedQuery<ResultSet> {
     private static final Logger LOGGER = Logger.getLogger(GetRecordsQuery.class.getName());
 
-    private final String ccnb;
+    private final PlainQuery pquery;
     private final List<DigitizationRecord> records = new ArrayList<DigitizationRecord>();
 
-    public GetRecordsQuery(String ccnb) {
-        this.ccnb = ccnb;
+    public GetRecordsQuery(PlainQuery pquery) {
+        this.pquery = pquery;
     }
 
     public List<DigitizationRecord> getRecords() {
         return records;
     }
 
-    private void addRecord(String barcode, String scanStateStr, String marcXmlStr) {
-        LOGGER.fine(String.format("addRecord cCNB: %s, barcode: %s, scanState: %s, xml.length: %s\n",
-                ccnb, barcode, scanStateStr, marcXmlStr.length()));
+    private void addRecord(int recordId, String scanStateStr, String marcXmlStr) {
+        LOGGER.fine(String.format("addRecord recordId: %s, scanState: %s, xml.length: %s\n",
+                recordId, scanStateStr, marcXmlStr.length()));
         LOGGER.finest(marcXmlStr);
         DigitizationRecord record = new DigitizationRecord();
-        record.setBarcode(barcode);
+        record.setRecordId(recordId);
         DigitizationState state = RegistryDataSource.resolveState(scanStateStr);
         record.setState(state);
         Source source = resloveSource(marcXmlStr);
@@ -69,21 +71,61 @@ public final class GetRecordsQuery implements PreparedQuery<ResultSet> {
     public void consumeQuery(ResultSet resultSet) throws SQLException {
         while (resultSet.next()) {
             String xml = resultSet.getString("xml");
-            String carkod = resultSet.getString("carkod");
+            int id = resultSet.getInt("id");
             String skenstav = resultSet.getString("skenstav");
 
-            addRecord(carkod, skenstav, xml);
+            addRecord(id, skenstav, xml);
         }
     }
 
     public PreparedStatement prepareStatement(Connection conn) throws SQLException {
-        PreparedStatement pstmt = conn.prepareStatement(
-                "select carkod, skenstav, xml from predloha where ccnb=?");
-        pstmt.setString(1, ccnb);
+        StringBuilder whereBuilder = new StringBuilder();
+        addWhereStringExp(whereBuilder, "CARKOD", pquery.getBarcode());
+        addWhereStringExp(whereBuilder, "CCNB", pquery.getCcnb());
+        addWhereStringExp(whereBuilder, "ISBN", pquery.getIsbn());
+        addWhereStringExp(whereBuilder, "ISSN", pquery.getIssn());
+        addWhereStringExp(whereBuilder, "ROKVYD", pquery.getIssueDate());
+        addWhereStringExp(whereBuilder, "NAZEV", pquery.getTitle());
+        addWhereStringExp(whereBuilder, "ROCNIKPER", pquery.getVolume());
+
+        String query = "select id, skenstav, xml from predloha where " + whereBuilder.toString();
+        LOGGER.fine(query);
+
+        PreparedStatement pstmt = conn.prepareStatement(query);
+
+        int column = 1;
+        column = setStringParam(pstmt, column, pquery.getBarcode());
+        column = setStringParam(pstmt, column, pquery.getCcnb());
+        column = setStringParam(pstmt, column, pquery.getIsbn());
+        column = setStringParam(pstmt, column, pquery.getIssn());
+        column = setStringParam(pstmt, column, pquery.getIssueDate());
+        column = setStringParam(pstmt, column, pquery.getTitle());
+        column = setStringParam(pstmt, column, pquery.getVolume());
         return pstmt;
     }
 
     public Class<ResultSet> getQueryType() {
         return ResultSet.class;
+    }
+
+    private static void addWhereStringExp(StringBuilder sb, String name, String value) {
+        if (value != null && value.length() > 0) {
+            addWhereExp(sb, name + "=?");
+        }
+    }
+
+    private static void addWhereExp(StringBuilder sb, String exp) {
+        if (sb.length() > 0) {
+            sb.append(" and ");
+        }
+        sb.append(exp);
+    }
+
+    private static int setStringParam(PreparedStatement ps, int col, String value) throws SQLException {
+        if (value != null && value.length() > 0) {
+            LOGGER.log(Level.FINE, "PreparedStatement.setString({0}, {1})", new Object[] {col, value});
+            ps.setString(col++, value);
+        }
+        return col;
     }
 }

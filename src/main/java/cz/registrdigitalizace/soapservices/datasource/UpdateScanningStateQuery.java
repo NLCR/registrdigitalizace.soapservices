@@ -32,8 +32,7 @@ import java.util.logging.Logger;
 public class UpdateScanningStateQuery implements PreparedQuery<Integer> {
     private static final Logger LOGGER = Logger.getLogger(UpdateScanningStateQuery.class.getName());
 
-    private final String ccnb;
-    private final String barcode;
+    private final int recordId;
     private final DigitizationState newState;
     /** old scanning state used to make optimistic synchronization */
     private final DigitizationState oldState;
@@ -56,11 +55,10 @@ public class UpdateScanningStateQuery implements PreparedQuery<Integer> {
         return updated;
     }
 
-    public UpdateScanningStateQuery(String ccnb, String barcode,
+    public UpdateScanningStateQuery(int recordId,
             DigitizationState newState, DigitizationState oldState,
             String user, java.util.Date date) {
-        this.ccnb = ccnb;
-        this.barcode = barcode;
+        this.recordId = recordId;
         this.newState = newState;
         this.oldState = oldState;
         this.scanUser = user;
@@ -83,7 +81,7 @@ public class UpdateScanningStateQuery implements PreparedQuery<Integer> {
     private PreparedStatement prepareFinishedStateStatement(Connection conn) throws SQLException {
         final String query =
                 "update predloha set skenstav=?, skendate=?, skenprac=?, edidate=?, ediuser=?"
-                + " where ccnb=? and carkod=? and "
+                + " where id=? and "
                 + (oldState != DigitizationState.UNDEFINED ? "skenstav=?" : "skenstav is null");
 
         PreparedStatement pstmt = conn.prepareStatement(query);
@@ -100,10 +98,8 @@ public class UpdateScanningStateQuery implements PreparedQuery<Integer> {
         pstmt.setDate(col++, editDate);
         sb.append(String.format("column: %s, val: %s\n", col, editUser));
         pstmt.setString(col++, editUser);
-        sb.append(String.format("column: %s, val: %s\n", col, ccnb));
-        pstmt.setString(col++, ccnb);
-        sb.append(String.format("column: %s, val: %s\n", col, barcode));
-        pstmt.setString(col++, barcode);
+        sb.append(String.format("column: %s, val: %s\n", col, recordId));
+        pstmt.setInt(col++, recordId);
         if (oldState != DigitizationState.UNDEFINED) {
             String oldStateTxt = RegistryDataSource.resolveState(oldState);
             sb.append(String.format("column: %s, val: %s\n", col, oldStateTxt));
@@ -117,7 +113,7 @@ public class UpdateScanningStateQuery implements PreparedQuery<Integer> {
 
     private PreparedStatement preparePlainChangeStatement(Connection conn) throws SQLException {
         final String query = "update predloha set skenstav=?, edidate=?, ediuser=?"
-                + " where ccnb=? and carkod=? and "
+                + " where id=? and "
                 + (oldState != DigitizationState.UNDEFINED ? "skenstav=?" : "skenstav is null");
         PreparedStatement pstmt = conn.prepareStatement(
                 query);
@@ -130,10 +126,8 @@ public class UpdateScanningStateQuery implements PreparedQuery<Integer> {
         pstmt.setDate(col++, editDate);
         sb.append(String.format("column: %s, val: %s\n", col, editUser));
         pstmt.setString(col++, editUser);
-        sb.append(String.format("column: %s, val: %s\n", col, ccnb));
-        pstmt.setString(col++, ccnb);
-        sb.append(String.format("column: %s, val: %s\n", col, barcode));
-        pstmt.setString(col++, barcode);
+        sb.append(String.format("column: %s, val: %s\n", col, recordId));
+        pstmt.setInt(col++, recordId);
         if (oldState != DigitizationState.UNDEFINED) {
             String oldStateTxt = RegistryDataSource.resolveState(oldState);
             sb.append(String.format("column: %s, val: %s\n", col, oldStateTxt));
@@ -145,8 +139,8 @@ public class UpdateScanningStateQuery implements PreparedQuery<Integer> {
     public void consumeQuery(Integer result) throws SQLException {
         updated = result > 0;
         LOGGER.fine(String.format(
-                "update rowCount: %s, cCNB:%s, barcode:%s, state:%s",
-                result, ccnb, barcode, newState));
+                "update rowCount: %s, recordId:%s, state:%s",
+                result, recordId, newState));
     }
 
     public Class<Integer> getQueryType() {
