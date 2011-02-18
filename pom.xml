@@ -74,7 +74,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 </configuration>
             </plugin>
         </plugins>
-        <finalName>digiregistry-soapws</finalName>
+        <finalName>soapservices</finalName>
     </build>
     <repositories>
         <repository>
