@@ -47,21 +47,22 @@ public final class GetRecordsQuery implements PreparedQuery<ResultSet> {
     }
 
     private void addRecord(int recordId, String scanStateStr, String marcXmlStr) {
+        int marcXmlStrLength = (marcXmlStr != null) ? marcXmlStr.length() : -1;
         LOGGER.fine(String.format("addRecord recordId: %s, scanState: %s, xml.length: %s\n",
-                recordId, scanStateStr, marcXmlStr.length()));
+                recordId, scanStateStr, marcXmlStrLength));
         LOGGER.finest(marcXmlStr);
         DigitizationRecord record = new DigitizationRecord();
         record.setRecordId(recordId);
         DigitizationState state = RegistryDataSource.resolveState(scanStateStr);
         record.setState(state);
-        Source source = resloveSource(marcXmlStr);
+        Source source = resolveSource(marcXmlStr);
         record.setDescriptor(source);
 
         records.add(record);
     }
 
-    private static Source resloveSource(String marcXmlStr) {
-        if (marcXmlStr == null || marcXmlStr.length() > 0) {
+    private static Source resolveSource(String marcXmlStr) {
+        if (marcXmlStr != null && marcXmlStr.length() > 0) {
             marcXmlStr = RegistryDataSource.fixMarcXml(marcXmlStr);
             return new StreamSource(new StringReader(marcXmlStr));
         }

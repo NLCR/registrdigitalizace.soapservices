@@ -90,8 +90,10 @@ public class DigitizationRegistry {
             MarcTransformer transormer = new MarcTransformer();
             for (DigitizationRecord record : records) {
                 Source source = record.getDescriptor();
-                source = transormer.transform(source, format);
-                record.setDescriptor(source);
+                if (source != null) {
+                    source = transormer.transform(source, format);
+                    record.setDescriptor(source);
+                }
             }
             return records;
         } catch (DataSourceException ex) {
