@@ -73,6 +73,19 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     <target>1.5</target>
                 </configuration>
             </plugin>
+
+            <!-- use jaxws:wsgen goal to generate WSDL without running service -->
+            <!-- do not include in war as it is not required to run the service -->
+            <plugin>
+                <groupId>org.jvnet.jax-ws-commons</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <version>2.1</version>
+                <configuration>
+                    <sei>cz.registrdigitalizace.soapservices.DigitizationRegistry</sei>
+                    <genWsdl>true</genWsdl>
+                    <keep>true</keep>
+                </configuration>
+            </plugin>
         </plugins>
         <finalName>soapservices</finalName>
     </build>
