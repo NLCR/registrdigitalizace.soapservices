@@ -46,14 +46,14 @@ public final class GetRecordStateQuery implements PreparedQuery<ResultSet> {
 
     public void consumeQuery(ResultSet resultSet) throws SQLException {
         if (resultSet.next()) {
-            String stateTxt = resultSet.getString("skenstav");
-            state = RegistryDataSource.resolveState(stateTxt);
+            String stateTxt = resultSet.getString("stavrec");
+            state = DigitizationState.resolve(stateTxt);
         }
     }
 
     public PreparedStatement prepareStatement(Connection conn) throws SQLException {
         PreparedStatement pstmt = conn.prepareStatement(
-                "select skenstav from predloha where id=?");
+                "select stavrec from predloha where id=?");
         pstmt.setInt(1, recordId);
         return pstmt;
     }

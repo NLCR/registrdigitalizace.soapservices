@@ -17,13 +17,52 @@
 
 package cz.registrdigitalizace.soapservices.model;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
- * Scanning state.
+ * Digitization state (PREDLOHA.STAVREC).
  * 
  * @author Jan Pokorsky
  */
 public enum DigitizationState {
 
-    FINISHED, IN_PROGRESS, UNDEFINED;
+    FINISHED("finished", "finished", "archived"),
+    IN_PROGRESS("progress", "active", "pripravenoProMf", "predanoZpracovateli", "progress"),
+    SCHEDULED("planovane", "planovane"),
+    UNDEFINED(null, (String) null);
+
+    private final Set<String> dbValues;
+    private final String toDbValue;
+
+    private DigitizationState(String toDbValue, String... fromDbValues) {
+        if (fromDbValues == null || fromDbValues.length == 0) {
+            throw new IllegalArgumentException();
+        }
+        this.dbValues = new HashSet<String>(Arrays.asList(fromDbValues));
+        this.toDbValue = toDbValue;
+    }
+
+    /**
+     * Gets value used to persist enum constant in Relief DB.
+     * @return value
+     */
+    public String getDbValue() {
+        return toDbValue;
+    }
+
+    /**
+     * Maps Relief DB states (PREDLOHA.STAVREC) to enum constants.
+     */
+    public static DigitizationState resolve(String dbValue) {
+        for (DigitizationState state : DigitizationState.values()) {
+            if (state.dbValues.contains(dbValue)) {
+                return state;
+            }
+        }
+        return DigitizationState.UNDEFINED;
+    }
+
 
 }

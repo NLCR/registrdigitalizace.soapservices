@@ -17,14 +17,10 @@
 
 package cz.registrdigitalizace.soapservices.datasource;
 
-import cz.registrdigitalizace.soapservices.model.DigitizationState;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.EnumMap;
-import java.util.IdentityHashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.InitialContext;
@@ -39,18 +35,6 @@ import javax.sql.DataSource;
  */
 public final class RegistryDataSource {
     private static final Logger LOGGER = Logger.getLogger(RegistryDataSource.class.getName());
-    private static final Map<String, DigitizationState> STATE_DB2JAVA
-            = new IdentityHashMap<String, DigitizationState>();
-    private static final Map<DigitizationState, String> JAVA2STATE_DB
-            = new EnumMap<DigitizationState, String>(DigitizationState.class);
-
-    static {
-        STATE_DB2JAVA.put("dokonceno", DigitizationState.FINISHED);
-        STATE_DB2JAVA.put("nedokonceno", DigitizationState.IN_PROGRESS);
-        for (Map.Entry<String, DigitizationState> entry : STATE_DB2JAVA.entrySet()) {
-            JAVA2STATE_DB.put(entry.getValue(), entry.getKey());
-        }
-    }
 
     public <T> void runQuery(PreparedQuery<T> query) throws DataSourceException {
         Connection connection = null;
@@ -148,26 +132,6 @@ public final class RegistryDataSource {
             xml = sb.toString();
         }
         return xml;
-    }
-
-    /**
-     * mapping to Relief DB values
-     * @param ds scanning state
-     * @return mapped value or {@code null} in case of {@link DigitizationState#UNDEFINED}
-     */
-    static String resolveState(DigitizationState ds) {
-        return JAVA2STATE_DB.get(ds);
-    }
-
-    /**
-     * mapping from ReliefDB values
-     * @param s scanning state
-     * @return mapped value
-     */
-    static DigitizationState resolveState(String s) {
-        s = (s == null) ? null : s.intern();
-        DigitizationState state = STATE_DB2JAVA.get(s);
-        return (state == null) ? DigitizationState.UNDEFINED : state;
     }
 
 }

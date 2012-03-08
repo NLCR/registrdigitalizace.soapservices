@@ -133,11 +133,11 @@ public class DigitizationRegistry {
     }
 
     /**
-     * Updates scanning state for a given record.
+     * Updates digitization state for a given record.
      *
      * @param recordId ID of required record
-     * @param newState new scanning state
-     * @param oldState old scanning state. Use
+     * @param newState new digitization state
+     * @param oldState old digitization state. Use
      *          {@link #getRecordState(int) getRecordState}
      *          or {@link #findRecords(cz.registrdigitalizace.soapservices.model.PlainQuery, cz.registrdigitalizace.soapservices.model.RecordFormat) findRecords}
      * @param user scanner operator

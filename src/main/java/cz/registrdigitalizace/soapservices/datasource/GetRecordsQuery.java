@@ -53,7 +53,7 @@ public final class GetRecordsQuery implements PreparedQuery<ResultSet> {
         LOGGER.finest(marcXmlStr);
         DigitizationRecord record = new DigitizationRecord();
         record.setRecordId(recordId);
-        DigitizationState state = RegistryDataSource.resolveState(scanStateStr);
+        DigitizationState state = DigitizationState.resolve(scanStateStr);
         record.setState(state);
         Source source = resolveSource(marcXmlStr);
         record.setDescriptor(source);
@@ -73,9 +73,9 @@ public final class GetRecordsQuery implements PreparedQuery<ResultSet> {
         while (resultSet.next()) {
             String xml = resultSet.getString("xml");
             int id = resultSet.getInt("id");
-            String skenstav = resultSet.getString("skenstav");
+            String stavrec = resultSet.getString("stavrec");
 
-            addRecord(id, skenstav, xml);
+            addRecord(id, stavrec, xml);
         }
     }
 
@@ -89,7 +89,7 @@ public final class GetRecordsQuery implements PreparedQuery<ResultSet> {
         addWhereStringExp(whereBuilder, "NAZEV", pquery.getTitle());
         addWhereStringExp(whereBuilder, "ROCNIKPER", pquery.getVolume());
 
-        String query = "select id, skenstav, xml from predloha where " + whereBuilder.toString();
+        String query = "select id, stavrec, xml from predloha where " + whereBuilder.toString();
         LOGGER.fine(query);
 
         PreparedStatement pstmt = conn.prepareStatement(query);

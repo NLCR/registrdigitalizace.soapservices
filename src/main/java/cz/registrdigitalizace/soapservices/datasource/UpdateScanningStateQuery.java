@@ -25,7 +25,7 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 /**
- * Updates scanning state.
+ * Updates digitization state.
  *
  * @author Jan Pokorsky
  */
@@ -36,10 +36,11 @@ public class UpdateScanningStateQuery implements PreparedQuery<Integer> {
     private final DigitizationState newState;
     /** old scanning state used to make optimistic synchronization */
     private final DigitizationState oldState;
-    /** scanner operator */
-    private final String scanUser;
-    /** date of scanning */
-    private Date scanDate;
+    private DigitizationState currentState;
+    /** digitization operator */
+    private final String finishUser;
+    /** date of finished digitization */
+    private Date finishDate;
     /** hard coded user making the update */
     private final String editUser = "webservice";
     /** update date */
@@ -61,13 +62,23 @@ public class UpdateScanningStateQuery implements PreparedQuery<Integer> {
         this.recordId = recordId;
         this.newState = newState;
         this.oldState = oldState;
-        this.scanUser = user;
+        this.finishUser = user;
         this.editDate = new Date(System.currentTimeMillis());
-        this.scanDate = (date == null && newState == DigitizationState.FINISHED)
+        this.finishDate = (date == null && newState == DigitizationState.FINISHED)
                 ? this.editDate : new Date(date.getTime());
     }
 
     public PreparedStatement prepareStatement(Connection conn) throws SQLException {
+        // get current digitization state
+        GetRecordStateQuery stateQuery = new GetRecordStateQuery(recordId);
+        PreparedStatement stateStmt = stateQuery.prepareStatement(conn);
+        try {
+            stateQuery.consumeQuery(stateStmt.executeQuery());
+            this.currentState = stateQuery.getState();
+        } finally {
+            stateStmt.close();
+        }
+
         PreparedStatement pstmt;
         if (newState == DigitizationState.FINISHED) {
             pstmt = prepareFinishedStateStatement(conn);
@@ -80,31 +91,27 @@ public class UpdateScanningStateQuery implements PreparedQuery<Integer> {
 
     private PreparedStatement prepareFinishedStateStatement(Connection conn) throws SQLException {
         final String query =
-                "update predloha set skenstav=?, skendate=?, skenprac=?, edidate=?, ediuser=?"
-                + " where id=? and "
-                + (oldState != DigitizationState.UNDEFINED ? "skenstav=?" : "skenstav is null");
+                "update predloha set stavrec=?, findate=?, finuser=?, edidate=?, ediuser=?"
+                + " where id=?"
+                // hack: concurrent modification => update nothing => stavrec='xxx'
+                + (oldState != currentState ? " and stavrec='xxx'" : "");
 
         PreparedStatement pstmt = conn.prepareStatement(query);
         int col = 1;
-        String newStateTxt = RegistryDataSource.resolveState(newState);
+        String newStateTxt = newState.getDbValue();
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("column: %s, val: %s\n", col, newStateTxt));
         pstmt.setString(col++, newStateTxt);
-        sb.append(String.format("column: %s, val: %s\n", col, scanDate));
-        pstmt.setDate(col++, scanDate);
-        sb.append(String.format("column: %s, val: %s\n", col, scanUser));
-        pstmt.setString(col++, scanUser);
+        sb.append(String.format("column: %s, val: %s\n", col, finishDate));
+        pstmt.setDate(col++, finishDate);
+        sb.append(String.format("column: %s, val: %s\n", col, finishUser));
+        pstmt.setString(col++, finishUser);
         sb.append(String.format("column: %s, val: %s\n", col, editDate));
         pstmt.setDate(col++, editDate);
         sb.append(String.format("column: %s, val: %s\n", col, editUser));
         pstmt.setString(col++, editUser);
         sb.append(String.format("column: %s, val: %s\n", col, recordId));
         pstmt.setInt(col++, recordId);
-        if (oldState != DigitizationState.UNDEFINED) {
-            String oldStateTxt = RegistryDataSource.resolveState(oldState);
-            sb.append(String.format("column: %s, val: %s\n", col, oldStateTxt));
-            pstmt.setString(col++, oldStateTxt);
-        }
 
         sb.append(query);
         LOGGER.fine(sb.toString());
@@ -112,13 +119,15 @@ public class UpdateScanningStateQuery implements PreparedQuery<Integer> {
     }
 
     private PreparedStatement preparePlainChangeStatement(Connection conn) throws SQLException {
-        final String query = "update predloha set skenstav=?, edidate=?, ediuser=?"
-                + " where id=? and "
-                + (oldState != DigitizationState.UNDEFINED ? "skenstav=?" : "skenstav is null");
+        final String query = "update predloha set stavrec=?, edidate=?, ediuser=?"
+                + " where id=?"
+                // hack: concurrent modification => update nothing => stavrec='xxx'
+                + (oldState != currentState ? " and stavrec='xxx'" : "");
+        
         PreparedStatement pstmt = conn.prepareStatement(
                 query);
         int col = 1;
-        String newStateTxt = RegistryDataSource.resolveState(newState);
+        String newStateTxt = newState.getDbValue();
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("column: %s, val: %s\n", col, newStateTxt));
         pstmt.setString(col++, newStateTxt);
@@ -128,11 +137,9 @@ public class UpdateScanningStateQuery implements PreparedQuery<Integer> {
         pstmt.setString(col++, editUser);
         sb.append(String.format("column: %s, val: %s\n", col, recordId));
         pstmt.setInt(col++, recordId);
-        if (oldState != DigitizationState.UNDEFINED) {
-            String oldStateTxt = RegistryDataSource.resolveState(oldState);
-            sb.append(String.format("column: %s, val: %s\n", col, oldStateTxt));
-            pstmt.setString(col++, oldStateTxt);
-        }
+
+        sb.append(query);
+        LOGGER.fine(sb.toString());
         return pstmt;
     }
 
