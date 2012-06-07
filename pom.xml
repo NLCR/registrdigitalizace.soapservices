@@ -97,7 +97,4 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <name>Repository for library[metro]</name>
         </repository>
     </repositories>
-    <properties>
-        <netbeans.hint.deploy.server>Tomcat60</netbeans.hint.deploy.server>
-    </properties>
 </project>
