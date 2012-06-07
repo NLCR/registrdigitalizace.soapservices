@@ -23,7 +23,9 @@ import cz.registrdigitalizace.soapservices.model.DigitizationState;
 import cz.registrdigitalizace.soapservices.model.PlainQuery;
 import cz.registrdigitalizace.soapservices.model.RecordFormat;
 import cz.registrdigitalizace.soapservices.transform.MarcTransformer;
+import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -178,9 +180,111 @@ public class DigitizationRegistry {
         }
     }
 
+    /**
+     * Adds list of URN:NBN items for given digitization record.
+     * If any item matches existing one it is excluded from insert.
+     *
+     * @param recordId ID of required record
+     * @param date date of allocation or {@code null} for present date
+     * @param urnNbns list of URN:NBN. Valid list size is 1-1000.
+     * @return {@code true} when the update passes or {@code false} if there is no such record
+     * @throws DigitizationRegistryException in case of illegal parameters or some internal error.
+     */
+    @WebMethod(operationName = "addRecordUrnNbn")
+    public boolean addRecordUrnNbn(
+            @WebParam(name = "recordId") int recordId,
+            @WebParam(name = "date") Date date,
+            @WebParam(name = "urnNbn") List<String> urnNbns
+            ) throws DigitizationRegistryException {
+
+        StringBuilder failureMsg = new StringBuilder();
+        checkRecordIdParam(recordId, failureMsg);
+        checkCollectionParam("urnNbnList", urnNbns, 1, 1000, failureMsg);
+        if (failureMsg.length() > 0) {
+            throw new DigitizationRegistryException(failureMsg.toString());
+        }
+        LinkedHashSet<String> uniqueUrnNbns = new LinkedHashSet<String>(urnNbns.size());
+        for (String urnNbn : urnNbns) {
+            if (urnNbn != null) {
+                urnNbn = urnNbn.trim();
+                if (!urnNbn.isEmpty()) {
+                    uniqueUrnNbns.add(urnNbn);
+                }
+            }
+        }
+        if (uniqueUrnNbns.isEmpty()) {
+            throw new DigitizationRegistryException("'urnNbnList' parameter contains no valid item!");
+        }
+
+        try {
+            DigitizationRegistryDao dao = new DigitizationRegistryDao();
+            return dao.addRecordUrnNbn(recordId, uniqueUrnNbns, date);
+        } catch (DataSourceException ex) {
+            Logger.getLogger(DigitizationRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            throw DigitizationRegistryException.internalServiceError();
+        }
+    }
+
+    /**
+     * Sets list of URN:NBN items for given digitization record. It removes all
+     * existing URN:NBN.
+     *
+     * @param recordId ID of required record
+     * @param date date of allocation or {@code null} for present date
+     * @param urnNbns list of URN:NBN. Valid list size is 0-1000.
+     * @return {@code true} when the update passes or {@code false} if there is no such record
+     * @throws DigitizationRegistryException in case of illegal parameters or some internal error.
+     */
+    @WebMethod(operationName = "setRecordUrnNbn")
+    public boolean setRecordUrnNbn(
+            @WebParam(name = "recordId") int recordId,
+            @WebParam(name = "date") Date date,
+            @WebParam(name = "urnNbn") List<String> urnNbns
+            ) throws DigitizationRegistryException {
+
+        StringBuilder failureMsg = new StringBuilder();
+        checkRecordIdParam(recordId, failureMsg);
+        // urnNbnList can be empty for set => remove
+        checkCollectionParam("urnNbnList", urnNbns, 0, 1000, failureMsg);
+        if (failureMsg.length() > 0) {
+            throw new DigitizationRegistryException(failureMsg.toString());
+        }
+        LinkedHashSet<String> uniqueUrnNbns = new LinkedHashSet<String>(urnNbns.size());
+        for (String urnNbn : urnNbns) {
+            if (urnNbn != null) {
+                urnNbn = urnNbn.trim();
+                if (!urnNbn.isEmpty()) {
+                    uniqueUrnNbns.add(urnNbn);
+                }
+            }
+        }
+        
+        try {
+            DigitizationRegistryDao dao = new DigitizationRegistryDao();
+            return dao.setRecordUrnNbn(recordId, uniqueUrnNbns, date);
+        } catch (DataSourceException ex) {
+            Logger.getLogger(DigitizationRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            throw DigitizationRegistryException.internalServiceError();
+        }
+    }
+
     private static void checkNotNullParam(String param, Object value, StringBuilder failureMsg) {
         if (value == null) {
             buildFailureMsg(failureMsg, "Missing '%s' parameter.", param);
+        }
+    }
+
+    private static void checkCollectionParam(String param, Collection<?> value, Integer min, Integer max, StringBuilder failureMsg) {
+        if (min != null) {
+            checkNotNullParam(param, value, failureMsg);
+            if (value != null && value.size() < min) {
+                buildFailureMsg(failureMsg, "'%s' parameter requires at least %s item(s).", param, min);
+            }
+        }
+        if (max != null) {
+            if (value != null && value.size() > max) {
+                buildFailureMsg(failureMsg, "'%s' parameter accepts no more than %s item(s).", param, max);
+            }
         }
     }
 

@@ -25,8 +25,11 @@ public interface PreparedQuery<T> {
 
     void consumeQuery(T result) throws SQLException;
 
+    /**
+     * @return statement or {@code null} to rollback connection and exit
+     */
     PreparedStatement prepareStatement(Connection conn) throws SQLException;
 
-    /** accepted types are Integer (DML) and ResultSet (selects) */
+    /** accepted types are Integer, int[].class (DML) and ResultSet (selects) */
     Class<T> getQueryType();
 }

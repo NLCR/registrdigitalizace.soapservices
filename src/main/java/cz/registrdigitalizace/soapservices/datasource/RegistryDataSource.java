@@ -44,10 +44,16 @@ public final class RegistryDataSource {
             connection = initConnection();
             connection.setAutoCommit(false);
             stmt = query.prepareStatement(connection);
+            if (stmt == null) {
+                connection.rollback();
+                return ;
+            }
             T result;
             if (query.getQueryType() == ResultSet.class) {
                 resultSet = stmt.executeQuery();
                 result = (T) resultSet;
+            } else if (query.getQueryType() == int[].class) {
+                result = (T) stmt.executeBatch();
             } else {
                 result = (T) Integer.valueOf(stmt.executeUpdate());
             }

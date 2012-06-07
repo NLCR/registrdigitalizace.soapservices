@@ -22,6 +22,7 @@ import cz.registrdigitalizace.soapservices.model.DigitizationState;
 import cz.registrdigitalizace.soapservices.model.PlainQuery;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -51,5 +52,22 @@ public final class DigitizationRegistryDao {
                 recordId, newState, oldState, user, date);
         ds.runQuery(query);
         return query.isUpdated();
+    }
+
+    public boolean setRecordUrnNbn(int recordId, Set<String> urnNbns, Date date) throws DataSourceException {
+        UpdateUrnNbnQuery query = new UpdateUrnNbnQuery(recordId, urnNbns, date, false);
+        ds.runQuery(query);
+        return query.isUpdated();
+    }
+
+    public boolean addRecordUrnNbn(int recordId, Set<String> urnNbns, Date date) throws DataSourceException {
+        UpdateUrnNbnQuery query = new UpdateUrnNbnQuery(recordId, urnNbns, date, true);
+        ds.runQuery(query);
+        return query.isUpdated();
+    }
+
+    public void init() throws DataSourceException {
+        PlaantIdQuery query = new PlaantIdQuery();
+        ds.runQuery(query);
     }
 }
