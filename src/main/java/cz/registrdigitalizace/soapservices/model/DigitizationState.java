@@ -28,8 +28,15 @@ import java.util.Set;
  */
 public enum DigitizationState {
 
+    /** The digitization of record canceled. */
+    CANCELED("vyrazeno", "vyrazeno"),
+    /** The digitization of record finished. */
     FINISHED("finished", "finished", "archived"),
+    /** The digitization of record is in progress. */
     IN_PROGRESS("progress", "active", "pripravenoProMf", "predanoZpracovateli", "progress"),
+    /** The digitization record requires revision. */
+    REVISION("revize", "revize"),
+    /** The record is scheduled for digitization. */
     SCHEDULED("planovane", "planovane"),
     UNDEFINED(null, (String) null);
 
