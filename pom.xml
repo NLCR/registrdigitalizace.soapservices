@@ -24,7 +24,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>Digitization Registry SOAP Services</name>
-    <url>http://maven.apache.org</url>
+    <url>http://code.google.com/p/registrdigitalizace/</url>
 
     <licenses>
         <license>
@@ -32,6 +32,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <url>http://www.gnu.org/licenses/gpl.html</url>
         </license>
     </licenses>
+
+    <scm>
+        <connection>scm:svn:http://registrdigitalizace.googlecode.com/svn/soapservices/trunk/</connection>
+        <developerConnection>scm:svn:https://registrdigitalizace.googlecode.com/svn/soapservices/trunk/</developerConnection>
+    </scm>
 
     <dependencies>
 
