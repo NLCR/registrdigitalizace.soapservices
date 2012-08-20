@@ -20,6 +20,7 @@ package cz.registrdigitalizace.soapservices.model;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlMimeType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.transform.Source;
 
@@ -35,6 +36,7 @@ public final class DigitizationRecord {
     private int recordId;
     @XmlElement(required=true)
     private DigitizationState state;
+    @XmlMimeType("application/xml")
     private Source descriptor;
 
     public int getRecordId() {
