@@ -22,7 +22,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <groupId>cz.registrdigitalizace</groupId>
     <artifactId>soapservices</artifactId>
     <packaging>war</packaging>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
     <name>Digitization Registry SOAP Services</name>
     <url>http://code.google.com/p/registrdigitalizace/</url>
 
