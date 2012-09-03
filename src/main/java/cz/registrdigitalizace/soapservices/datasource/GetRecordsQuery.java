@@ -86,6 +86,7 @@ public final class GetRecordsQuery implements PreparedQuery<ResultSet> {
         addWhereStringExp(whereBuilder, "ISBN", pquery.getIsbn());
         addWhereStringExp(whereBuilder, "ISSN", pquery.getIssn());
         addWhereStringExp(whereBuilder, "ROKVYD", pquery.getIssueDate());
+        addWhereStringExp(whereBuilder, "SIGNATURA", pquery.getSignature());
         addWhereStringExp(whereBuilder, "NAZEV", pquery.getTitle());
         addWhereStringExp(whereBuilder, "ROCNIKPER", pquery.getVolume());
 
@@ -100,6 +101,7 @@ public final class GetRecordsQuery implements PreparedQuery<ResultSet> {
         column = setStringParam(pstmt, column, pquery.getIsbn());
         column = setStringParam(pstmt, column, pquery.getIssn());
         column = setStringParam(pstmt, column, pquery.getIssueDate());
+        column = setStringParam(pstmt, column, pquery.getSignature());
         column = setStringParam(pstmt, column, pquery.getTitle());
         column = setStringParam(pstmt, column, pquery.getVolume());
         return pstmt;

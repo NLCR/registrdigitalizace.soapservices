@@ -71,11 +71,13 @@ public class DigitizationRegistry {
             String isbn = query.getIsbn();
             String issn = query.getIssn();
             String name = query.getTitle();
+            String signature = query.getSignature();
             boolean anyValid = barcode != null && barcode.length() > 0
                     || ccnb != null && ccnb.length() > 0
                     || isbn != null && isbn.length() > 0
                     || issn != null && issn.length() > 0
-                    || name != null && name.length() > 0;
+                    || name != null && name.length() > 0
+                    || signature != null && signature.length() > 0;
             if (!anyValid) {
                 buildFailureMsg(failureMsg, "Invalid query. Any non-empty parameter required.");
             }

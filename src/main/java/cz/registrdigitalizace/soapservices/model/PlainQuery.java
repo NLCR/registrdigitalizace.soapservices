@@ -39,6 +39,11 @@ public final class PlainQuery {
     private String issn;
     /** PREDLOHA.ROKVYD */
     private String issueDate;
+    /**
+     * PREDLOHA.SIGNATURA
+     * @since 1.1
+     */
+    private String signature;
     /** PREDLOHA.NAZEV */
     private String title;
     /** PREDLOHA.ROCNIKPER */
@@ -82,6 +87,20 @@ public final class PlainQuery {
 
     public void setIssueDate(String issueDate) {
         this.issueDate = issueDate;
+    }
+
+    /**
+     * @since 1.1
+     */
+    public String getSignature() {
+        return signature;
+    }
+
+    /**
+     * @since 1.1
+     */
+    public void setSignature(String signature) {
+        this.signature = signature;
     }
 
     public String getTitle() {
