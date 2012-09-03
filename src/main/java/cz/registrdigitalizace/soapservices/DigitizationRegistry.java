@@ -50,6 +50,7 @@ public class DigitizationRegistry {
      * @param query query to select particular records
      * @param format format of record descriptor. It may be {@code null}
      *              for default {@link RecordFormat#MARC_XML Marc XML}.
+     * @param maxResults limits number of returned records (since 1.1)
      * @return list of existing digitization records.
      * @throws DigitizationRegistryException in case of illegal parameters or some internal error.
      */
@@ -58,7 +59,10 @@ public class DigitizationRegistry {
             @WebParam(name = "query")
             PlainQuery query,
             @WebParam(name = "format")
-            RecordFormat format) throws DigitizationRegistryException {
+            RecordFormat format,
+            @WebParam(name = "maxResults")
+            Integer maxResults
+            ) throws DigitizationRegistryException {
 
         StringBuilder failureMsg = new StringBuilder();
         checkNotNullParam("query", query, null);
@@ -87,9 +91,14 @@ public class DigitizationRegistry {
             throw new DigitizationRegistryException(failureMsg.toString());
         }
 
+        int limit = 1000;
+        if (maxResults != null && maxResults > 0 && maxResults < limit) {
+            limit = maxResults;
+        }
+
         try {
             DigitizationRegistryDao dao = new DigitizationRegistryDao();
-            List<DigitizationRecord> records = dao.findRecords(query);
+            List<DigitizationRecord> records = dao.findRecords(query, limit);
 
             MarcTransformer transormer = new MarcTransformer();
             for (DigitizationRecord record : records) {

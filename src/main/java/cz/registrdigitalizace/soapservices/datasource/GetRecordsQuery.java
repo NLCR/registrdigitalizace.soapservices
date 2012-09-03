@@ -37,9 +37,11 @@ public final class GetRecordsQuery implements PreparedQuery<ResultSet> {
 
     private final PlainQuery pquery;
     private final List<DigitizationRecord> records = new ArrayList<DigitizationRecord>();
+    private final int maxResults;
 
-    public GetRecordsQuery(PlainQuery pquery) {
+    public GetRecordsQuery(PlainQuery pquery, int maxResults) {
         this.pquery = pquery;
+        this.maxResults = maxResults;
     }
 
     public List<DigitizationRecord> getRecords() {
@@ -70,7 +72,7 @@ public final class GetRecordsQuery implements PreparedQuery<ResultSet> {
     }
 
     public void consumeQuery(ResultSet resultSet) throws SQLException {
-        while (resultSet.next()) {
+        for (int i = 0; resultSet.next() && i < maxResults; i++) {
             String xml = resultSet.getString("xml");
             int id = resultSet.getInt("id");
             String stavrec = resultSet.getString("stavrec");

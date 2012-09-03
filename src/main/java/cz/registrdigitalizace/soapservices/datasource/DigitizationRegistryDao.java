@@ -32,8 +32,8 @@ public final class DigitizationRegistryDao {
 
     public final RegistryDataSource ds = new RegistryDataSource();
 
-    public List<DigitizationRecord> findRecords(PlainQuery pquery) throws DataSourceException {
-        GetRecordsQuery query = new GetRecordsQuery(pquery);
+    public List<DigitizationRecord> findRecords(PlainQuery pquery, int maxResults) throws DataSourceException {
+        GetRecordsQuery query = new GetRecordsQuery(pquery, maxResults);
         ds.runQuery(query);
         return query.getRecords();
     }
