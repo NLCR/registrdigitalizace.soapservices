@@ -64,8 +64,11 @@ public class UpdateScanningStateQuery implements PreparedQuery<Integer> {
         this.oldState = oldState;
         this.finishUser = user;
         this.editDate = new Date(System.currentTimeMillis());
-        this.finishDate = (date == null && newState == DigitizationState.FINISHED)
-                ? this.editDate : new Date(date.getTime());
+        if (newState == DigitizationState.FINISHED) {
+            this.finishDate = (date == null) ? this.editDate : new Date(date.getTime());
+        } else {
+            this.finishDate = null;
+        }
     }
 
     public PreparedStatement prepareStatement(Connection conn) throws SQLException {
