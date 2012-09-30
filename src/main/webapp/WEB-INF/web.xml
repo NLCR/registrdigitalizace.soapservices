@@ -29,7 +29,7 @@
         <web-resource-collection>
             <web-resource-name>DRWebService</web-resource-name>
             <description>Digitization Registry Web Service</description>
-            <url-pattern>/DigitizationRegistryService/*</url-pattern>
+            <url-pattern>/DigitizationRegistryService</url-pattern>
             <http-method>PUT</http-method>
             <http-method>POST</http-method>
             <http-method>DELETE</http-method>
