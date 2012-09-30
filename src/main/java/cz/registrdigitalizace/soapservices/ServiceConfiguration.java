@@ -31,7 +31,7 @@ public class ServiceConfiguration implements ServletContextListener {
         try {
             initDb();
         } catch (DataSourceException ex) {
-            throw new IllegalStateException();
+            throw new IllegalStateException(ex);
         }
     }
 
