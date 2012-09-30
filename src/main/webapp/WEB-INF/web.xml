@@ -37,6 +37,7 @@
         <auth-constraint>
             <description/>
             <role-name>registry-ws</role-name>
+            <role-name>registry-ws-readonly</role-name>
         </auth-constraint>
     </security-constraint>
     <login-config>
@@ -46,6 +47,10 @@
     <security-role>
         <description>Digitization Registry Web Service Role</description>
         <role-name>registry-ws</role-name>
+    </security-role>
+    <security-role>
+        <description>Digitization Registry Web Service Read Only Role</description>
+        <role-name>registry-ws-readonly</role-name>
     </security-role>
     <resource-ref>
         <description>Digitization Registry Database</description>

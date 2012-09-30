@@ -29,11 +29,13 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
+import javax.xml.ws.WebServiceContext;
 
 /**
  * SOAP web service makes available <a href="http://registrdigitalizace.cz">
@@ -43,6 +45,9 @@ import javax.xml.transform.TransformerException;
  */
 @WebService(targetNamespace="http://registrdigitalizace.cz/soapservices")
 public class DigitizationRegistry {
+
+    @Resource
+    private WebServiceContext wsContext;
 
     /**
      * Returns list of digitization records described in required format.
@@ -172,6 +177,7 @@ public class DigitizationRegistry {
             @WebParam(name = "date")
             Date date) throws DigitizationRegistryException {
 
+        checkWritePermission();
         StringBuilder failureMsg = new StringBuilder();
         checkRecordIdParam(recordId, failureMsg);
         checkStateParam(newState, failureMsg);
@@ -208,6 +214,7 @@ public class DigitizationRegistry {
             @WebParam(name = "urnNbn") List<String> urnNbns
             ) throws DigitizationRegistryException {
 
+        checkWritePermission();
         StringBuilder failureMsg = new StringBuilder();
         checkRecordIdParam(recordId, failureMsg);
         checkCollectionParam("urnNbnList", urnNbns, 1, 1000, failureMsg);
@@ -253,6 +260,7 @@ public class DigitizationRegistry {
             @WebParam(name = "urnNbn") List<String> urnNbns
             ) throws DigitizationRegistryException {
 
+        checkWritePermission();
         StringBuilder failureMsg = new StringBuilder();
         checkRecordIdParam(recordId, failureMsg);
         // urnNbnList can be empty for set => remove
@@ -276,6 +284,13 @@ public class DigitizationRegistry {
         } catch (DataSourceException ex) {
             Logger.getLogger(DigitizationRegistry.class.getName()).log(Level.SEVERE, null, ex);
             throw DigitizationRegistryException.internalServiceError();
+        }
+    }
+
+    private void checkWritePermission() throws DigitizationRegistryException {
+        if (!wsContext.isUserInRole("registry-ws")) {
+            throw new DigitizationRegistryException(
+                    "Access forbidden. You don't have permission to run the operation.");
         }
     }
 
