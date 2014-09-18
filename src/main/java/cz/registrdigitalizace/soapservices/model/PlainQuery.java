@@ -49,6 +49,10 @@ public final class PlainQuery {
     /** PREDLOHA.ROCNIKPER */
     private String volume;
 
+
+
+    private String pole001;
+
     public String getBarcode() {
         return barcode;
     }
@@ -118,5 +122,15 @@ public final class PlainQuery {
     public void setVolume(String volume) {
         this.volume = volume;
     }
+
+    /**
+     * @since 1.2
+     */
+    public String getPole001() {return pole001;}
+
+    /**
+     * @since 1.2
+     */
+    public void setPole001(String pole001) {this.pole001 = pole001;}
 
 }

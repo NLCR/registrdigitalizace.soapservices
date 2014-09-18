@@ -20,6 +20,9 @@ package cz.registrdigitalizace.soapservices.datasource;
 import cz.registrdigitalizace.soapservices.model.DigitizationRecord;
 import cz.registrdigitalizace.soapservices.model.DigitizationState;
 import cz.registrdigitalizace.soapservices.model.PlainQuery;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,8 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
 
 public final class GetRecordsQuery implements PreparedQuery<ResultSet> {
     private static final Logger LOGGER = Logger.getLogger(GetRecordsQuery.class.getName());
@@ -91,6 +92,7 @@ public final class GetRecordsQuery implements PreparedQuery<ResultSet> {
         addWhereStringExp(whereBuilder, "SIGNATURA", pquery.getSignature());
         addWhereStringExp(whereBuilder, "NAZEV", pquery.getTitle());
         addWhereStringExp(whereBuilder, "ROCNIKPER", pquery.getVolume());
+        addWhereStringExp(whereBuilder, "POLE001", pquery.getPole001());
 
         String query = "select id, stavrec, xml from predloha where " + whereBuilder.toString();
         LOGGER.fine(query);
@@ -106,6 +108,7 @@ public final class GetRecordsQuery implements PreparedQuery<ResultSet> {
         column = setStringParam(pstmt, column, pquery.getSignature());
         column = setStringParam(pstmt, column, pquery.getTitle());
         column = setStringParam(pstmt, column, pquery.getVolume());
+        column = setStringParam(pstmt, column, pquery.getPole001());
         return pstmt;
     }
 

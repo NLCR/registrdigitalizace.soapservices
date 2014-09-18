@@ -23,12 +23,7 @@ import cz.registrdigitalizace.soapservices.model.DigitizationState;
 import cz.registrdigitalizace.soapservices.model.PlainQuery;
 import cz.registrdigitalizace.soapservices.model.RecordFormat;
 import cz.registrdigitalizace.soapservices.transform.MarcTransformer;
-import java.util.Collection;
-import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.annotation.Resource;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -36,6 +31,12 @@ import javax.jws.WebService;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.ws.WebServiceContext;
+import java.util.Collection;
+import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * SOAP web service makes available <a href="http://registrdigitalizace.cz">
@@ -81,12 +82,14 @@ public class DigitizationRegistry {
             String issn = query.getIssn();
             String name = query.getTitle();
             String signature = query.getSignature();
+            String pole001 = query.getPole001();
             boolean anyValid = barcode != null && barcode.length() > 0
                     || ccnb != null && ccnb.length() > 0
                     || isbn != null && isbn.length() > 0
                     || issn != null && issn.length() > 0
                     || name != null && name.length() > 0
-                    || signature != null && signature.length() > 0;
+                    || signature != null && signature.length() > 0
+                    || pole001 != null && pole001.length() > 0;
             if (!anyValid) {
                 buildFailureMsg(failureMsg, "Invalid query. Any non-empty parameter required.");
             }
