@@ -24,7 +24,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <packaging>war</packaging>
     <version>1.3-SNAPSHOT</version>
     <name>Digitization Registry SOAP Services</name>
-    <url>http://code.google.com/p/registrdigitalizace/</url>
+    <url>https://github.com/incad/registrdigitalizace</url>
 
     <licenses>
         <license>
@@ -34,8 +34,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     </licenses>
 
     <scm>
-        <connection>scm:git:https://code.google.com/p/registrdigitalizace.soapservices</connection>
-        <developerConnection>scm:git:https://code.google.com/p/registrdigitalizace.soapservices</developerConnection>
+        <connection>scm:git:git@github.com:incad/registrdigitalizace.soapservices.git</connection>
+        <url>https://github.com/incad/registrdigitalizace.soapservices</url>
     </scm>
 
     <dependencies>
